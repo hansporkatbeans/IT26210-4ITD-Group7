@@ -17,15 +17,22 @@ while True:
    json_status = json_data["info"]["statuscode"]
    if json_status == 0:
         print("API Status: " + str(json_status) + " = A successful route call.\n")
-        print("=============================================")
-        print("Directions from " + (orig) + " to " + (dest))
-        print("Trip Duration:   " + (json_data["route"]["formattedTime"]))
-        print("Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
-        print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
-        print("=============================================")
+        print(" = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ")
+        print()
+        print("                                   TRIP DETAILS")
+        print("                           Directions from " + (orig) + " to " + (dest))
+        print("                           Trip Duration:   " + (json_data["route"]["formattedTime"]))
+        print("                           Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
+        print("                           Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
+        print()
+        print(" = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =")
+        x=0
+        print()
         for each in json_data["route"]["legs"][0]["maneuvers"]:
-            print((each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61) + " km)"))
-            print("=============================================\n")    
+               x+=1
+               print(str(x) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61) + " km)"))
+               print()
+          #   print("=============================================\n")    
    elif json_status == 402:
         print("**********************************************")
         print("Status Code: " + str(json_status) + "; Invalid user inputs for one or both locations.")
