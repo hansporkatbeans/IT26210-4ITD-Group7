@@ -34,20 +34,22 @@ def estEta(time):
 
 
 while True:
-    print()
-    orig = input("Starting Location: ")
+    print("\n= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = \n")
+    print("\tWelcome User! To generate trip details and directions, kindly fill out the needed information below.\n \t\t\t\tOnce done, you may enter \"q\" or \"quit\". Thank you! \n")
+    print("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = \n")
+    orig = input("Specify Starting Point: ")
     if orig == "quit" or orig == "q":
         break
-    dest = input("Destination: ")
+    dest = input("Specify Target Destination: ")
     if dest == "quit" or dest == "q":
         break
     while True:
-        met = input("Metric: ")
+        met = input("Metric(miles/km): ")
         met = met.lower()
         if met == "miles" or met == "mile" or met == "km" or met == "kilometers" or met == "kilometer":
             break
         else :
-            print("Invalid input. Please enter either miles, km, or kilometers.")
+            print("Sorry, it seems that the data you have entered is invalid. Please enter either miles, km, or kilometers.")
     if met == "quit" or met == "q":
         break
     url = main_api + urllib.parse.urlencode({"key": key, "from":orig, "to":dest})
@@ -79,11 +81,11 @@ while True:
                 print(str(x) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])) + " miles)"))
     elif json_status == 402:
         print("******************************************")
-        print("Status Code: " + str(json_status) + "; Invalid user inputs for one or both locations.")
+        print("Status Code: " + str(json_status) + "; You have entered an invalid data, please try again.")
         print("**********************************************\n")
     elif json_status == 611:
         print("******************************************")
-        print("Status Code: " + str(json_status) + "; Missing an entry for one or both locations.")
+        print("Status Code: " + str(json_status) + "; Incomplete fields, please ensure that all fields are filled.")
         print("**********************************************\n") 
     else:
         print("********************************************************************")
