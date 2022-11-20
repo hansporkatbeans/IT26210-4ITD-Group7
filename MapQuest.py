@@ -30,8 +30,7 @@ def estEta(time):
     sec %= 3600
     min = sec // 60
     sec %= 60
-    print("Estimated Trip Duration: " + str("{:g}".format(hour)) + " Hours, " + str("{:g}".format(min)) + " Minutes, and " + str("{:g}".format(sec)) + " Seconds.")
-
+    print("Estimated Trip Duration: " + str("{:g}".format(hour)) + " Hours, " + str("{:g}".format(min)) + " Minutes, and " + str("{:g}".format(sec)) + " Seconds.")    
 
 while True:
     print("\n= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = \n")
@@ -42,7 +41,8 @@ while True:
         break
     dest = input("Specify Target Destination: ")
     if dest == "quit" or dest == "q":
-        break
+        break   
+        
     while True:
         met = input("Metric(miles/km): ")
         met = met.lower()
@@ -50,13 +50,15 @@ while True:
             break
         else :
             print("Sorry, it seems that the data you have entered is invalid. Please enter either miles, km, or kilometers.")
+                 
     if met == "quit" or met == "q":
         break
+        
     url = main_api + urllib.parse.urlencode({"key": key, "from":orig, "to":dest})
-    print("URL: " + (url))
+    print("\nURL: " + (url))
     json_data = requests.get(url).json()
     json_status = json_data["info"]["statuscode"]
-    if json_status == 0:
+    if json_status == 0:        
         print("API Status: " + str(json_status) + " = A successful route call.\n")
         print("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ")
         print()
@@ -68,7 +70,7 @@ while True:
             print("Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))
         elif met == "miles" or met == "mile" :
             print("Miles:           " + str("{:.2f}".format((json_data["route"]["distance"]))))
-        print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
+        #print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
         print()
         print("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =")
         x=0
@@ -79,6 +81,34 @@ while True:
                 print(str(x) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61) + " km)"))
             elif met == "miles" or met == "mile" :
                 print(str(x) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])) + " miles)"))
+        
+        # ========================================================================================================
+        
+        fileSave = input("\nWould you like to save the directions from " + orig + " to " + dest + " to a file? (y/n): ")
+        if fileSave == "y" or fileSave == "Y":
+            fileName = orig + "to" + dest + ".txt"
+            print("Directions from " + orig + " to " + dest + " will be saved as " + fileName)
+            with open(fileName, "w") as file:
+                file.write("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = \n")
+                file.write("Directions from " + (orig) + " to " + (dest) + "\n")
+                file.write("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = \n")
+                if met == "km" or met == "kilometers" or met == "kilometer" :
+                    print("Kilometers:      " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)), file=file)
+                elif met == "miles" or met == "mile" :
+                    print("Miles:           " + str("{:.2f}".format((json_data["route"]["distance"]))), file=file)
+                #print("Fuel Used (Ltr): " + str("{:.2f}".format((json_data["route"]["fuelUsed"])*3.78)))
+                print()
+                print("= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =", file=file)
+                x=0
+                for each in json_data["route"]["legs"][0]["maneuvers"]:
+                    x+=1
+                    print()
+                    if met == "km" or met == "kilometers" or met == "kilometer" :
+                        print(str(x) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61) + " km)"), file=file)
+                    elif met == "miles" or met == "mile" :
+                        print(str(x) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])) + " miles)"), file=file)
+    
+            
     elif json_status == 402:
         print("******************************************")
         print("Status Code: " + str(json_status) + "; You have entered an invalid data, please try again.")
@@ -92,3 +122,5 @@ while True:
         print("For Staus Code: " + str(json_status) + "; Refer to:")
         print("https://developer.mapquest.com/documentation/directions-api/status-codes")
         print("************************************************************************\n")
+        
+        
