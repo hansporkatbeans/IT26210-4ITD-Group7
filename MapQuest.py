@@ -2,6 +2,7 @@ from audioop import add
 import urllib.parse
 import requests
 import calendar
+import sys
 from datetime import date, datetime, time, timedelta
 
 main_api = "https://www.mapquestapi.com/directions/v2/route?"
@@ -106,7 +107,8 @@ while True:
                     if met == "km" or met == "kilometers" or met == "kilometer" :
                         print(str(x) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61) + " km)"), file=file)
                     elif met == "miles" or met == "mile" :
-                        print(str(x) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])) + " miles)"), file=file)               
+                        print(str(x) + ". " + (each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])) + " miles)"), file=file)
+    
     elif json_status == 402:
         print("******************************************")
         print("Status Code: " + str(json_status) + "; You have entered an invalid data, please try again.")
